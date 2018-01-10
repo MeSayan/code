@@ -1,0 +1,121 @@
+<!-- Problem Statement -->
+<strong>Examples:</strong>
+<pre>
+Input : 499
+Output : 499
+Explanation: N = 499, is made of digits which are not decreasing, therefore answer is N itself.
+
+Input : 12343
+Output : 12339
+Explanation: digits in 1234321, start decreasing after digit 4. 
+The largest number less than 12343
+and in which the digits do not decrease is 12339.
+</pre>
+
+<strong>Method 1:</strong> 
+We can apply brute force approach. We start from N, check it the digits are non decreasing or not. 
+If the digits of N are non decreasing, print N and stop. 
+Else we take N-1 and repeat the procedure. 
+<em>Complexity:</em> To check if the digits are non decreasing or not we need to scan through all digits of the number. 
+This takes [Tex]O(\log{} N)[/Tex]
+Further if it takes ‘S’ steps from N, to reach the required number, then the overall complexity of this technique becomes [Tex]O( S\log{N} )[/Tex] . 
+S varies from number to number, and it is difficult to therefore put an upper bound to the complexity of this algorithm.
+
+<strong>Method 2:</strong> 
+This method is guaranteed to compute the answer in [Tex]O( \log{N} )[/Tex] time. 
+We scan the digits of N once and if we see that they are non decreasing. 
+If we reach a point [Tex]i[/Tex] such digits start decreasing, then we immediately generate M. 
+Since we are interested in finding largest non decreasing number less than N, the value of M can be either of two values only. 
+
+•	[Tex] N [/Tex] itself
+Or
+•	[Tex]M = a_0 a_1 \dots a_i 9 9 9 \dots 9_n , \ 0 \le i \le n [/Tex] where [Tex] N = a_0 a_1 \dots a_n [/Tex]
+
+Here is a graphical demonstraton of the algorithm:
+<img src="http://contribute.geeksforgeeks.org/wp-content/uploads/AlgoNonDecreasing.png" alt="" width="714" height="523" class="alignnone size-full wp-image-224690" />
+
+<strong>Explanation:</strong>
+Let [Tex] N = a_0 a_1 \dots a_n [/Tex] 
+and [Tex] M = b_0 b_1 \dots b_n [/Tex]
+
+If digits are in non decreasing order then [Tex]a_i \ge a_i+1 \ \forall i[/Tex].
+If [Tex]N[/Tex] is not such a number and [Tex]j[/Tex] is the point from which digits start decreasing.
+For [Tex]M[/Tex] the digits from positions [Tex]0 \ to \ j[/Tex] are same as those of [Tex]N[/Tex].
+Beyond [Tex]j[/Tex] however we are always restricted to use [Tex]b_i \le a_i, \  j+1 \le i \le n [/Tex] so that [Tex]M \ngtr N[/Tex].
+To solve this, if we decrease the digit at [Tex]j[/Tex] by 1, then we are allowed to place [Tex]999 \dots 9 [/Tex] from [Tex]j+1[/Tex] positions onward.
+The resulting number will always be smaller than [Tex]N[/Tex].
+
+Thus the maximum number lesser than [Tex]N[/Tex], which satisfies the criterion will be formed by decreasing digit at j th place by 1 and then placing 999..9 after it. 
+
+
+<!-- To show strongly recommend and practice link    -->
+<div id="practice"></div>
+
+<strong>CODE</strong>:
+
+[sourcecode language="C" highlight=""]
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_DIGITS 10000
+
+// Function to compute and return M
+
+void getM(int digits[], int count) {
+
+   int i, j;
+
+   for ( i = 0; i < count-1; i++) {
+      if( digits[i] > digits[i+1]) {
+        // Decrease the digit by 1
+        digits[i] = digits[i] - 1;
+      break;
+    }
+   }
+
+   //Make remaining digits 9
+   for ( j = i+1; j < count; j++) {
+      digits[j] = 9;
+  }
+
+}
+
+
+// Driver Program
+
+int main() {
+
+  int  j;
+
+  // Inbuilt data types may not be used to store large numbers
+  // Use an array to store each digit of the number
+
+  // Used to input very large numbers
+  int digits[] = {4,5,6,7,1,0,3,5}; // N = 45671035
+
+
+  getM(digits, sizeof(digits)/sizeof(int));
+
+  for( j = 0; j < sizeof(digits) / sizeof(int) ; j++) {
+    printf("%d", digits[j]);
+   }
+
+  printf("\n");
+  return 0;
+
+}
+
+[/sourcecode]
+
+
+
+Output:
+<pre>
+<!-- Your Output -->
+45669999
+</pre>
+
+This article is contributed by <strong>Sayan Mahapatra</strong>. If you like GeeksforGeeks and would like to contribute, you can also write an article using <a href="http://www.contribute.geeksforgeeks.org">contribute.geeksforgeeks.org</a> or mail your article to contribute@geeksforgeeks.org. See your article appearing on the GeeksforGeeks main page and help other Geeks.
+
+
+Please write comments if you find anything incorrect, or you want to share more information about the topic discussed above.

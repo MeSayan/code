@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <math>
+
+
+int main() {
+	int T, N, Q;
+	int D[100000+1];
+	unsigned long long int product_D = 1;
+	unsigned long long int ans = 1;
+	int X;
+	
+	scanf("%d ", &T);
+	
+	while( T-- ) {
+		scanf("%d %d ", &N, &Q);
+		
+		for(i = 1; i <= N; i++) {
+			scanf("%d ",D+i);
+			product_D *= D[i];
+		}
+		
+		for( i = 1; i <= Q; i++) {
+			scanf("%d ",&X);	
+			ans = (int)((X/product_D));
+			printf("%d ",ans);
+		}
+		printf("\n");
+		
+	}
+	return 0;
+}
+
+		
+		
+		
+		
+			
+			

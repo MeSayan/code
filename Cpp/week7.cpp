@@ -1,43 +1,69 @@
-/* Week 7 programming assignment for NPTEL course DAA.
-Date: 5/9/17
-Author: Sayan
-Comments: Uses a greedy algorithm to find jobs which have earlier finish times
-*/
-
 #include <stdio.h>
+#include <string>
 #include <algorithm>
-
-#define S(x) J[x].second
-#define F(x) J[x].first
+#include <vector>
 
 
-int main() {
+using namespace std;
+int main()  {
+    int N,i,j,max = 0;
 
-    int N, s, d, c = 0, i, j;
-    scanf("%d", &N);
-    std::pair<int,int> J[N];
+    scanf("%d ",&N);
+    char X[N];
+    char Y[N];
+    vector< pair<int,int> > maxlist[N]; 
 
-    for( i = 0; i < N; i++) {
-        scanf("%d %d", &s, &d);
-        J[i] = std::make_pair(s+d,s); // Pair( Finish, Start)
+    for( i = 0; i < N; i++) { 
+        scanf("%c",X+i);
+        // Reverse String
+        Y[N-1-i] = X[i];
     }
 
-    std::sort(J, J+N);
+    int LCW[N][N];
 
+    
+
+    // Fill up the first row
     for( i = 0; i < N; i++) {
-        printf("%d %d\n", J[i].first, J[i].second);
+        LCW[0][i] = 0;
+        LCW[i][0] = 0;
+        // First Row
+        if( Y[i] == X[0] ) 
+            LCW[0][i] = 1;
+        //First Column
+        if( X[i] == Y[0]) 
+            LCW[i][0] = 1;
     }
-    printf("\n");
 
-    for( i = 0; i < N; ) {
-        c++; // Increase counter by 1
-        for( j = i+1; j < N; j++) {
-            if( S(j) > F(i) )
-                break;
+    for( i = 1; i < N; i++) {
+        for( j = 1; j < N; j++) {
+            
+          if( X[i] == Y[j] )
+                LCW[i][j] = 1 + LCW[i-1][j-1];
+            else
+                LCW[i][j] = 0;
+
+            // Keep track of max
+            if ( LCW[i][j] >= max ) { 
+                max = LCW[i][j];
+                maxlist[max].push_back(make_pair(i,j));
+            }
         }
-        i = j;
     }
 
-    printf("%d\n", c);
+    for( i = 0; i < N; i++) {
+        for( j = 0; j < N; j++) {
+            printf("%d \t",LCW[i][j]);
+        }
+        printf("\n");
+    }
+
+    for( vector< pair<int,int> >::iterator k = maxlist[max].begin(); k != maxlist[max].end(); k++) {
+        printf(" I = %d and J = %d \n", k->first,k->second);
+    }
+
     return 0;
 }
+
+
+
